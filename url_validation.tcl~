@@ -1,17 +1,15 @@
 register GET /entries/new {} {
     #| Form for submitting new blog entry
     set html ""
-    append html [h script type "text/javascript" \
+    append html \
+           [h script type "text/javascript" \
 	   src "https://code.jquery.com/jquery-1.9.1.min.js"]
-    append html [h script type "text/javascript" \
+    append html \
+	   [h script type "text/javascript" \
 	   src "https://code.jquery.com/ui/1.9.2/jquery-ui.min.js"]
-    append html [h script type "text/javascript" \
-	   src "https://cdn.jsdelivr.net/npm/js-cookie@2/src/js.cookie.min.js"]
-    append html [h script type "text/javascript" \
-	   src "https://cdnjs.cloudflare.com/ajax/libs/qtip2/3.0.3/jquery.qtip.min.js"]
-    append html [h script type "text/javascript" \
-	   src "https://d1ab3pgt4r9xn1.cloudfront.net/qcode-ui-4.34.0/js/qcode-ui.js"]
- 
+    append html [h script type "text/javascript" src "https://cdn.jsdelivr.net/npm/js-cookie@2/src/js.cookie.min.js"]
+    append html [h script type "text/javascript" src "https://cdnjs.cloudflare.com/ajax/libs/qtip2/3.0.3/jquery.qtip.min.js"]
+
     append html [h script type "text/javascript" src "https://d1ab3pgt4r9xn1.cloudfront.net/qcode-ui-4.34.0/js/qcode-ui.js"]
 
 # \

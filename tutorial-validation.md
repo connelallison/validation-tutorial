@@ -13,7 +13,7 @@ Additionally, you should note that this library makes extensive use of [jQuery](
 
 ## Input validation
 
-Input validation is an important feature on any site, necessary both for security and for a good user experience. Even in our simple blog site we have constructed as a learning exercise, deficient input validation can cause difficulty. To demonstrate this, try submitting a new entry with both the "Blog Title" and "Blog Content" fields left blank. You will notice there is now an empty line in your index - if you use the inspector feature in your browser to view the HTML, you will see that there is in fact a link to your blank entry taking up space in the index, but because it has no title the link has no text and cannot be clicked. In order to view this useless entry and delete it, you will need to find its entry_id and navigate to its page by manually typing the URL into your address bar.
+Input validation is an important feature on any site, necessary both for security and for a good user experience. Even in the simple blog site we have constructed as a learning exercise, deficient input validation can cause difficulty. To demonstrate this, try submitting a new entry with both the "Blog Title" and "Blog Content" fields left blank. You will notice there is now an empty line at the bottom of the list of links in your index page - if you use the inspector feature in your browser to view the HTML, you will see that there is in fact a link to your blank entry taking up space in the index, but because it has no title the link has no text and cannot be clicked. In order to view this useless entry and delete it, you will need to find its entry_id and navigate to its page by manually typing the URL into your address bar.
 
 This inconvenience could have been avoided with even very crude input validation, which you will now add.
 
@@ -26,7 +26,7 @@ alter table entries alter entry_title set not null;
 alter table entries alter entry_content set not null;
 ```
 
-Return to your browser and try submitting a blank entry. You will receive and error message, and your entry will not be saved. You have successfully implemented basic input validation - well done.
+Return to your browser and try submitting a blank entry. You will receive an error message, and your entry will not be saved. You have successfully implemented basic input validation - well done.
 
 However, we can do a better job of it than this, and we will use the qcode-ui library's validation plugin to do so.
 
@@ -73,29 +73,27 @@ This `html` variable will hold all of our HTML (including the form) and eventual
 ```
 Note that we have now given the form an id property - this will be used later by our JavaScript to select the form element.
 
-At present, our link back to the index page is placed inside the form element, as it was originally all we returned. Now that we have the `html` variable, it makes sense to move this line:
+At present, our link back to the index page is placed inside the form element, as it was originally all we returned. Now that we have the `html` variable, it no longer makes sense to have this line inside the form element:
 
 ```tcl
     append form [h a href "http://localhost/entries" "Return to index"]
 ```
 
-Move this line to be the last thing before we return the `html` variable, and change it so that the link is appended to `html` and not `form`.
+Move this line to be the last thing before we return the `html` variable, and change it so that the link is appended to `html` instead of `form`.
 
 ### Attaching our JavaScript
 
-Now that we have rearranged our HTML, we are ready to begin adding JavaScript. Immediately after creating the `html` variable, insert the following line:
+Now that we have rearranged our HTML, we are ready to begin adding JavaScript. Immediately after the assignment of the `html` variable, insert the following line:
 
 ```tcl
-    append html \
-           [h script type "text/javascript" \
+    append html [h script type "text/javascript" \
 	   src "https://code.jquery.com/jquery-1.9.1.min.js"]
 ```
 
 Our first script element imports the core jQuery library from a [CDN](https://en.wikipedia.org/wiki/Content_delivery_network) - we are placing this script first because some of our other scripts depend on it, and will return an error if it has not run already. Our next script will go directly below it:
 
 ```tcl
-    append html \
-	   [h script type "text/javascript" \
+    append html [h script type "text/javascript" \
 	   src "https://code.jquery.com/ui/1.9.2/jquery-ui.min.js"]
 ```
 
@@ -104,8 +102,10 @@ This script is the [jQuery UI library](https://jqueryui.com), which depends on j
 Next, we will add two more scripts that we will need before we can use the qcode-ui library. Add the following beneath your other scripts:
 
 ```tcl
-    append html [h script type "text/javascript" src "https://cdn.jsdelivr.net/npm/js-cookie@2/src/js.cookie.min.js"]
-    append html [h script type "text/javascript" src "https://cdnjs.cloudflare.com/ajax/libs/qtip2/3.0.3/jquery.qtip.min.js"]
+    append html [h script type "text/javascript" \
+           src "https://cdn.jsdelivr.net/npm/js-cookie@2/src/js.cookie.min.js"]
+    append html [h script type "text/javascript" \
+           src "https://cdnjs.cloudflare.com/ajax/libs/qtip2/3.0.3/jquery.qtip.min.js"]
 ```
 
 The first script is an API used by qcode-ui to handle cookies. The latter is used by the validation plugin to insert tooltips highlighting useful information, such as reminding a user to enter a valid value in a form field.
@@ -113,7 +113,8 @@ The first script is an API used by qcode-ui to handle cookies. The latter is use
 Now that we have prepared all of its dependencies, we are ready to include qcode-ui. Beneath the other scripts, add the following:
 
 ```tcl
-    append html [h script type "text/javascript" src "https://d1ab3pgt4r9xn1.cloudfront.net/qcode-ui-4.34.0/js/qcode-ui.js"]
+    append html [h script type "text/javascript" \
+           src "https://d1ab3pgt4r9xn1.cloudfront.net/qcode-ui-4.34.0/js/qcode-ui.js"]
 ```
 
 Reload the page, and use your browser's inspector - inside the head of your HTML, you should find all five scripts in their correct order. You now have access to the qcode-ui library, including its validation plugin.
