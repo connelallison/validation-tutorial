@@ -1,0 +1,76 @@
+Tutorial: Validation
+========
+
+### Introduction
+
+This tutorial will guide you through implementing input validation for the create and update forms in the blog site you built in the the [RESTful Blog tutorial](tutorial-restful-blog.md), using the validation plugin in the qcode-ui library. This assumes you have completed that tutorial and will add to the code you used there.
+
+## qcode-ui
+
+Up to now, you have made use of the qcode-tcl library - this tutorial will introduce a separate library: [qcode-ui](https://github.com/qcode-software/qcode-ui/tree/master). You may wish to look over its documentation before we begin.
+
+Additionally, you should note that this library makes extensive use of [jQuery](https://learn.jquery.com/about-jquery/), a JavaScript library widely used in web development. If you are not familiar with it, the parts absolutely essential to this tutorial will be explained where they become relevant, but as the qcode-ui library as a whole makes extensive use of jQuery you would benefit from taking some time to learn more about it.
+
+## Input validation
+
+Input validation is an important feature on any site, necessary both for security and for a good user experience. Even in our simple blog site we have constructed as a learning exercise, deficient input validation can cause difficulty. To demonstrate this, try submitting a new entry with both the "Blog Title" and "Blog Content" fields left blank. You will notice there is now an empty line in your index - if you use the inspector feature in your browser to view the HTML, you will see that there is in fact a link to your blank entry taking up space in the index, but because it has no title the link has no text and cannot be clicked. In order to view this useless entry and delete it, you will need to find its entry_id and navigate to its page by manually typing the URL into your address bar.
+
+This inconvenience could have been avoided with even very crude input validation, which you will now add.
+
+## Updating the database
+
+Implementing some rudimentary validation to prevent blank entries is very straightforward. Simply open psql, and run the following commands:
+
+```sql
+alter table entries alter entry_title set not null;
+alter table entries alter entry_content set not null;
+```
+
+Return to your browser and try submitting a blank entry. You will receive and error message, and your entry will not be saved. You have successfully implemented basic input validation - well done.
+
+However, we can do a better job of it than this, and we will use the qcode-ui library's validation plugin to do so.
+
+## Using the validation plugin
+
+Before we proceed, you may wish to read through the [validation plugin's documentation](https://github.com/qcode-software/qcode-ui/blob/master/docs/forms/validation/validation.md). 
+
+If we are to make use of the plugin, we must include the qcode-ui library when we serve our form page. Your `url_handlers.tcl` file should be unchanged since the end of the last tutorial. Before going any further, ensure your new entry form path handler matches the following:
+
+```tcl
+register GET /entries/new {} {
+    #| Form for submitting new blog entry
+    set form ""
+    append form [h label "Blog Title:"]
+    append form [h br]
+    append form [h input type text name entry_title]
+    append form [h br]
+    append form [h label "Blog Content:"]
+    append form [h br]
+    append form [h textarea name entry_content style "width: 400px; height: 120px;"]
+    append form [h br]
+    append form [h input type submit name submit value Submit]
+    append form [h br]
+    append form [h br]
+    append form [h a href "http://localhost/entries" "Return to index"]
+    
+    return [qc::form method POST action /entries $form]
+}
+```
+
+At present, your code assembles a form element and then returns it directly to be served to the client. We will be expanding the HTML we return to the client to include several JavaScript components from various sources. We will add them one at a time. First, place the following line at the top of your path handler, immediately below the comment:
+
+```tcl
+    set html ""
+```
+
+This `html` variable will hold all of our HTML (including the form) and eventually be what is returned to the client. Therefore, we must also append our form to the `html` variable, and change our return statement to return `html` instead of just the form. Remove your current return statement, and insert the following in its place:
+
+```tcl
+    append html [qc::form method POST action /entries id "entry-form" $form]
+    return $html
+```
+
+
+    append html \
+           [h script type "text/javascript" \
+	   src "https://code.jquery.com/jquery-1.9.1.min.js"]
