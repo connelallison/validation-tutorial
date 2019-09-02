@@ -221,7 +221,7 @@ Now that you have made these changes to creating an entry, you should find it ve
 
 ## Styling
 
-Our validation is now functional, but the messages we are displaying are quite unsightly - we should add some CSS. Doing so will be very simple, simply add the following to your path handler, below your first five scripts and before setting the `html` variable:
+Our validation is now functional, but the messages we are displaying are quite unsightly; we should add some CSS. Doing so will be very simple - simply add the following to your path handler, below your first five scripts and before setting the `html` variable:
 
 ```tcl
     append html [h script type "text/javascript" \
