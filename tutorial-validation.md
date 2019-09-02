@@ -108,7 +108,7 @@ Next, we will add two more scripts that we will need before we can use the qcode
            src "https://cdnjs.cloudflare.com/ajax/libs/qtip2/3.0.3/jquery.qtip.min.js"]
 ```
 
-The first script is an API used by qcode-ui to handle cookies. The latter is used by the validation plugin to insert tooltips highlighting useful information, such as reminding a user to enter a valid value in a form field.
+The first script is an API used by qcode-ui to handle cookies. The latter is qTip, a tooltip plugin used by the validation plugin to insert tooltips highlighting useful information, such as reminding a user to enter a valid value in a form field.
 
 Now that we have prepared all of its dependencies, we are ready to include qcode-ui. Beneath the other scripts, add the following:
 
@@ -124,7 +124,7 @@ Reload the page, and use your browser's inspector - inside the head of your HTML
 However, you will notice that including the library and its dependencies has not had any immediately noticeable effect on our form page. We are missing one last script, in which we write our own JavaScript and make use of the library to perform validation on our form inputs. Unlike the previous ones, it must be placed after the form element, as it will attempt to select the form by id and this will fail if the form does not exist yet at the time the script is run. Place the following on the final line before you return your `html` variable:
 
 ```tcl
-    append html [h script type "text/javascript" { \
+    append html [h script type "text/javascript" { 
 		     $('#update-form').validation({submit: false, messages: {error: {before: '#update-form'}}});
     	        	 
     	             $('#update-form').on('validationComplete', function(event) {
@@ -194,7 +194,7 @@ register GET /entries/new {} {
     
     append html [qc::form method POST action /entries id "entry-form" $form]
     append html [h a href "http://localhost/entries" "Return to index"]
-    append html [h script type "text/javascript" { \
+    append html [h script type "text/javascript" { 
 		     $('#entry-form').validation({submit: false, messages: {error: {before: '#entry-form'}}});
     	        	 
     	             $('#entry-form').on('validationComplete', function(event) {
@@ -218,3 +218,22 @@ register POST /entries {entry_title entry_content} {
 ```
 
 Now that you have made these changes to creating an entry, you should find it very easy to make the same changes to editing one. Go ahead and do that now using what you have learned.
+
+## Styling
+
+Our validation is now functional, but the messages we are displaying are quite unsightly - we should add some CSS. Doing so will be very simple, simply add the following to your path handler, below your first five scripts and before setting the `html` variable:
+
+```tcl
+    append html [h script type "text/javascript" \
+	   src "https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"]
+    append html [h link rel stylesheet type "text/css" \
+	   href "https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css"]
+    append html [h link rel stylesheet type "text/css" \
+	   href "https://js.qcode.co.uk/vendor/qtip/2.2.1/jquery.qtip.min.css"]
+    append html [h link rel stylesheet type "text/css" \
+	   href "https://js.qcode.co.uk/qcode-ui-4.13.0/css/qcode-ui.css"]
+```
+
+The first two things we have attached are for [Bootstrap](https://en.wikipedia.org/wiki/Bootstrap_(front-end_framework)), a popular CSS framework - the first is some JavaScript it depends on, and the second is the CSS itself. The third is CSS used by qTip and will make our tooltips look much nicer, and the last one is the CSS for the qcode-ui library itself. When you have added the new code and confirmed it is working, you can go ahead and do the same for your edit form as well.
+
+You have now implemented validation for your new entry and edit entry forms, and applied some basic styling to improve their appearance. Well done.

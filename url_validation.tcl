@@ -41,7 +41,7 @@ register GET /entries/new {} {
     
     append html [qc::form method POST action /entries id "entry-form" $form]
     append html [h a href "http://localhost/entries" "Return to index"]
-    append html [h script type "text/javascript" { \
+    append html [h script type "text/javascript" { 
 		     $('#entry-form').validation({submit: false, messages: {error: {before: '#entry-form'}}});
     	        	 
     	             $('#entry-form').on('validationComplete', function(event) {
@@ -104,11 +104,24 @@ register GET /entries/:entry_id/edit {entry_id} {
  #           integrity "sha256-eEa1kEtgK9ZL6h60VXwDsJ2rxYCwfxi40VZ9E0XwoEA=" \
  # 	   crossorigin "anonymous"
 
-    # append html [h script type "text/javascript" src "https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"]
-    # append html [h link rel stylesheet type "text/css" href "https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css"]
-    # append html [h link rel stylesheet type "text/css" href "https://js.qcode.co.uk/vendor/qtip/2.2.1/jquery.qtip.min.css"]
-    # append html [h link rel stylesheet type "text/css" href "https://js.qcode.co.uk/qcode-ui-4.13.0/css/qcode-ui.css"]
-    
+    append html [h script type "text/javascript" \
+	   src "https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"]
+    append html [h link rel stylesheet type "text/css" \
+	   href "https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css"]
+    append html [h link rel stylesheet type "text/css" \
+	   href "https://js.qcode.co.uk/vendor/qtip/2.2.1/jquery.qtip.min.css"]
+    append html [h link rel stylesheet type "text/css" \
+	   href "https://js.qcode.co.uk/qcode-ui-4.13.0/css/qcode-ui.css"]
+
+    append html [h script type "text/javascript" \
+	   src "https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"]
+    append html [h link rel stylesheet type "text/css" \
+	   href "https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css"]
+    append html [h link rel stylesheet type "text/css" \
+	   href "https://js.qcode.co.uk/vendor/qtip/2.2.1/jquery.qtip.min.css"]
+    append html [h link rel stylesheet type "text/css" \
+	   href "https://js.qcode.co.uk/qcode-ui-4.13.0/css/qcode-ui.css"]
+     
     set form ""
     append form [h label "Blog Title:"]
     append form [h input type text name entry_title value $entry_title]
@@ -124,7 +137,7 @@ register GET /entries/:entry_id/edit {entry_id} {
     
     append html [qc::form id "update-form" method POST action "/entries/$entry_id" $form]
     append form [h a href "http://localhost/entries" "Return to index"]    
-    append html [h script type "text/javascript" { \
+    append html [h script type "text/javascript" { 
 		     $('#update-form').validation({submit: false, messages: {error: {before: '#update-form'}}});
     	        	 
     	             $('#update-form').on('validationComplete', function(event) {
