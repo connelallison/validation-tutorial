@@ -139,3 +139,81 @@ However, you will notice that including the library and its dependencies has not
     		}]
 ```
 
+If you have not done so already, review the [validation plugin documentation](https://github.com/qcode-software/qcode-ui/blob/master/docs/forms/validation/validation.md) - it provides most of the information needed to understand this code. If you are not familiar with jQuery, you may have wondered what the `$` symbol means - it is a shortcut for using jQuery to select a DOM object using an identifier. In this case, `$(#entry-form')` returns a jQuery object containing our form, which we then call the `.validation()` method on to set up validation. The method accepts a number of optional arguments - we have specified `submit: false` to prevent automatic resubmission if all inputs are valid, and we have used the message option to have any error messages appear above the form rather than after it.
+
+Next, we create an event handler which will activate when validation has been completed. It accepts an anonymous function as an argument, in which we specify what to do with the response we receive. We specify that in the event of the response having a status of "valid", we should return a notify type message that says "Submitted", and otherwise to display an error message saying "Invalid values".
+
+Now that we have added our script, try submitting a blank entry. You should see an error message at the top of the page matching the one we specified in our script, as well as two at the bottom pointing out that your entry_title and entry_content are invalid. With proper styling, these two messages will be displayed inside the input elements they refer to, but that is something to worry about later.
+
+If you try submitting a valid entry, we would expect to see a "Submitted" message, but as you will see, this is not the result. Instead, we get a message saying "Sorry, something went wrong. Please try again." If you then return to the index, however, you will see that your entry has been submitted successfully (possibly multiple times, if you tried clicking the button again). To fix this, we must update our POST handler.
+
+Go to your POST request handler, and remove the following line:
+
+```tcl
+ns_returnredirect [qc::url "/entries/$entry_id"]
+```
+
+Try submitting again, and you should now see a "Submitted" notification at the bottom of the page. However, try clicking multiple times before returning to the index page - you will see that we still have the problem of making it easy to accidentally create duplicate entries. Some sort of redirect after successful submission is still desirable, but we must use something other than `ns_returnredirect` to implement it. Instead of using `ns_returnredirect`, put the following line in its place:
+
+```tcl
+    qc::response action redirect [qc::url "/entries/$entry_id"]
+```
+
+This will work properly with the validation plugin, and redirect the user only if they have successfully submitted an entry. If you look very carefully, you may see the "Submitted" message appear for a split second before you are redirected, but now its main use is to provide feedback to the user in the case of the redirect failing or taking unusually long.
+
+Your new entry form should now be successfully updated. If you are having any difficulties, you can check your code against the following:
+
+```tcl
+register GET /entries/new {} {
+    #| Form for submitting new blog entry
+    set html ""
+    append html [h script type "text/javascript" \
+	   src "https://code.jquery.com/jquery-1.9.1.min.js"]
+    append html [h script type "text/javascript" \
+	   src "https://code.jquery.com/ui/1.9.2/jquery-ui.min.js"]
+    append html [h script type "text/javascript" \
+	   src "https://cdn.jsdelivr.net/npm/js-cookie@2/src/js.cookie.min.js"]
+    append html [h script type "text/javascript" \
+	   src "https://cdnjs.cloudflare.com/ajax/libs/qtip2/3.0.3/jquery.qtip.min.js"]
+    append html [h script type "text/javascript" \
+	   src "https://d1ab3pgt4r9xn1.cloudfront.net/qcode-ui-4.34.0/js/qcode-ui.js"]
+    
+    set form ""
+    append form [h label "Blog Title:"]
+    append form [h br]
+    append form [h input type text name entry_title]
+    append form [h br]
+    append form [h label "Blog Content:"]
+    append form [h br]
+    append form [h textarea name entry_content style "width: 400px; height: 120px;"]
+    append form [h br]
+    append form [h input type submit name submit value Submit]
+    append form [h br]
+    append form [h br]
+    
+    append html [qc::form method POST action /entries id "entry-form" $form]
+    append html [h a href "http://localhost/entries" "Return to index"]
+    append html [h script type "text/javascript" \
+		     {$('#entry-form').validation({submit: false, messages: {error: {before: '#entry-form'}}});
+    	        	 
+    	        $('#entry-form').on('validationComplete', function(event) {
+    	const response = event.response;
+    	if (response.status === "valid") {
+    	    $(this).validation('setValuesFromResponse', response);
+    	    $(this).validation('showMessage', 'notify', 'Submitted');
+    	} else {
+    	    $(this).validation('showMessage', 'error', 'Invalid values');
+    	}
+    		});
+    		}]
+    return $html
+}
+
+register POST /entries {entry_title entry_content} {
+    #| Create a new blog entry
+    set entry_id [entry_create $entry_title $entry_content]
+    qc::response action redirect [qc::url "/entries/$entry_id"]    
+}
+```
+
+Now that you have made these changes to creating an entry, you should find it very easy to make the same changes to editing one. Go ahead and do that now using what you have learned.
