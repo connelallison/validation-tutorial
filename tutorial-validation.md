@@ -124,19 +124,20 @@ Reload the page, and use your browser's inspector - inside the head of your HTML
 However, you will notice that including the library and its dependencies has not had any immediately noticeable effect on our form page. We are missing one last script, in which we write our own JavaScript and make use of the library to perform validation on our form inputs. Unlike the previous ones, it must be placed after the form element, as it will attempt to select the form by id and this will fail if the form does not exist yet at the time the script is run. Place the following on the final line before you return your `html` variable:
 
 ```tcl
-    append html [h script type "text/javascript" \
-		     {$('#entry-form').validation({submit: false, messages: {error: {before: '#entry-form'}}});
+    append html [h script type "text/javascript" { \
+		     $('#update-form').validation({submit: false, messages: {error: {before: '#update-form'}}});
     	        	 
-    	        $('#entry-form').on('validationComplete', function(event) {
-    	const response = event.response;
-    	if (response.status === "valid") {
-    	    $(this).validation('setValuesFromResponse', response);
-    	    $(this).validation('showMessage', 'notify', 'Submitted');
-    	} else {
-    	    $(this).validation('showMessage', 'error', 'Invalid values');
-    	}
-    		});
-    		}]
+    	             $('#update-form').on('validationComplete', function(event) {
+			 const response = event.response;
+			 if (response.status === "valid") {
+			     $(this).validation('setValuesFromResponse', response);
+			     $(this).validation('showMessage', 'notify', 'Submitted');
+			 } else {
+			     $(this).validation('showMessage', 'error', 'Invalid values');
+			 }
+		     });
+    		}]    
+}
 ```
 
 If you have not done so already, review the [validation plugin documentation](https://github.com/qcode-software/qcode-ui/blob/master/docs/forms/validation/validation.md) - it provides most of the information needed to understand this code. If you are not familiar with jQuery, you may have wondered what the `$` symbol means - it is a shortcut for using jQuery to select a DOM object using an identifier. In this case, `$(#entry-form')` returns a jQuery object containing our form, which we then call the `.validation()` method on to set up validation. The method accepts a number of optional arguments - we have specified `submit: false` to prevent automatic resubmission if all inputs are valid, and we have used the message option to have any error messages appear above the form rather than after it.
@@ -193,18 +194,18 @@ register GET /entries/new {} {
     
     append html [qc::form method POST action /entries id "entry-form" $form]
     append html [h a href "http://localhost/entries" "Return to index"]
-    append html [h script type "text/javascript" \
-		     {$('#entry-form').validation({submit: false, messages: {error: {before: '#entry-form'}}});
+    append html [h script type "text/javascript" { \
+		     $('#entry-form').validation({submit: false, messages: {error: {before: '#entry-form'}}});
     	        	 
-    	        $('#entry-form').on('validationComplete', function(event) {
-    	const response = event.response;
-    	if (response.status === "valid") {
-    	    $(this).validation('setValuesFromResponse', response);
-    	    $(this).validation('showMessage', 'notify', 'Submitted');
-    	} else {
-    	    $(this).validation('showMessage', 'error', 'Invalid values');
-    	}
-    		});
+    	             $('#entry-form').on('validationComplete', function(event) {
+			 const response = event.response;
+			 if (response.status === "valid") {
+			     $(this).validation('setValuesFromResponse', response);
+			     $(this).validation('showMessage', 'notify', 'Submitted');
+			 } else {
+			     $(this).validation('showMessage', 'error', 'Invalid values');
+			 }
+		     });
     		}]
     return $html
 }

@@ -41,18 +41,18 @@ register GET /entries/new {} {
     
     append html [qc::form method POST action /entries id "entry-form" $form]
     append html [h a href "http://localhost/entries" "Return to index"]
-    append html [h script type "text/javascript" \
-		     {$('#entry-form').validation({submit: false, messages: {error: {before: '#entry-form'}}});
+    append html [h script type "text/javascript" { \
+		     $('#entry-form').validation({submit: false, messages: {error: {before: '#entry-form'}}});
     	        	 
-    	        $('#entry-form').on('validationComplete', function(event) {
-    	const response = event.response;
-    	if (response.status === "valid") {
-    	    $(this).validation('setValuesFromResponse', response);
-    	    $(this).validation('showMessage', 'notify', 'Submitted');
-    	} else {
-    	    $(this).validation('showMessage', 'error', 'Invalid values');
-    	}
-    		});
+    	             $('#entry-form').on('validationComplete', function(event) {
+			 const response = event.response;
+			 if (response.status === "valid") {
+			     $(this).validation('setValuesFromResponse', response);
+			     $(this).validation('showMessage', 'notify', 'Submitted');
+			 } else {
+			     $(this).validation('showMessage', 'error', 'Invalid values');
+			 }
+		     });
     		}]
     return $html
 }
@@ -124,18 +124,18 @@ register GET /entries/:entry_id/edit {entry_id} {
     
     append html [qc::form id "update-form" method POST action "/entries/$entry_id" $form]
     append form [h a href "http://localhost/entries" "Return to index"]    
-    append html [h script type "text/javascript" \
-    		{$('#update-form').validation({submit: false});
+    append html [h script type "text/javascript" { \
+		     $('#update-form').validation({submit: false, messages: {error: {before: '#update-form'}}});
     	        	 
-    	        $('#update-form').on('validationComplete', function(event) {
-    	const response = event.response;
-    	if (response.status === "valid") {
-    	    $(this).validation('setValuesFromResponse', response);
-    	    $(this).validation('showMessage', 'notify', 'Submitted');
-    	} else {
-    	    $(this).validation('showMessage', 'error', 'Invalid values');
-    	}
-    		});
+    	             $('#update-form').on('validationComplete', function(event) {
+			 const response = event.response;
+			 if (response.status === "valid") {
+			     $(this).validation('setValuesFromResponse', response);
+			     $(this).validation('showMessage', 'notify', 'Submitted');
+			 } else {
+			     $(this).validation('showMessage', 'error', 'Invalid values');
+			 }
+		     });
     		}]    
 }
 
