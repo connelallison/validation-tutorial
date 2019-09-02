@@ -234,6 +234,6 @@ Our validation is now functional, but the messages we are displaying are quite u
 	   href "https://js.qcode.co.uk/qcode-ui-4.13.0/css/qcode-ui.css"]
 ```
 
-The first two things we have attached are for [Bootstrap](https://en.wikipedia.org/wiki/Bootstrap_(front-end_framework)), a popular CSS framework - the first is some JavaScript it depends on, and the second is the CSS itself. The third is CSS used by qTip and will make our tooltips look much nicer, and the last one is the CSS for the qcode-ui library itself. When you have added the new code and confirmed it is working, you can go ahead and do the same for your edit form as well.
+The first two things we have attached are for [Bootstrap](https://en.wikipedia.org/wiki/Bootstrap_(front-end_framework)), a popular CSS framework - the first is some JavaScript it depends on, and the second is the CSS. The third is CSS used by qTip and will make our tooltips look much nicer, and the last one is the CSS for the qcode-ui library itself. When you have added the new code and confirmed it is working, you can go ahead and do the same for your edit form as well.
 
 You have now implemented validation for your new entry and edit entry forms, and applied some basic styling to improve their appearance. Well done.
