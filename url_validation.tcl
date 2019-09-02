@@ -11,8 +11,7 @@ register GET /entries/new {} {
 	   src "https://cdnjs.cloudflare.com/ajax/libs/qtip2/3.0.3/jquery.qtip.min.js"]
     append html [h script type "text/javascript" \
 	   src "https://d1ab3pgt4r9xn1.cloudfront.net/qcode-ui-4.34.0/js/qcode-ui.js"]
- 
-    append html [h script type "text/javascript" src "https://d1ab3pgt4r9xn1.cloudfront.net/qcode-ui-4.34.0/js/qcode-ui.js"]
+
 
 # \
 # 	   integrity "sha256-wS9gmOZBqsqWxgIVgA8Y9WcQOa7PgSIX+rPA0VL2rbQ=" \
@@ -85,23 +84,31 @@ register GET /entries/:entry_id/edit {entry_id} {
 	where entry_id=:entry_id
     }
     set html ""
-    append html \
-           [h script type "text/javascript" \
-	   src "https://code.jquery.com/jquery-1.9.1.min.js" \
-	   integrity "sha256-wS9gmOZBqsqWxgIVgA8Y9WcQOa7PgSIX+rPA0VL2rbQ=" \
-	   crossorigin "anonymous"]
-    append html \
-	   [h script type "text/javascript" \
-	   src "https://code.jquery.com/ui/1.9.2/jquery-ui.min.js" \
-           integrity "sha256-eEa1kEtgK9ZL6h60VXwDsJ2rxYCwfxi40VZ9E0XwoEA=" \
-	   crossorigin "anonymous"]
-    append html [h script type "text/javascript" src "https://cdn.jsdelivr.net/npm/js-cookie@2/src/js.cookie.min.js"]
-    append html [h script type "text/javascript" src "https://cdnjs.cloudflare.com/ajax/libs/qtip2/3.0.3/jquery.qtip.min.js"]
-    append html [h script type "text/javascript" src "https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"]
-    append html [h link rel stylesheet type "text/css" href "https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css"]
-    append html [h link rel stylesheet type "text/css" href "https://js.qcode.co.uk/vendor/qtip/2.2.1/jquery.qtip.min.css"]
-    append html [h link rel stylesheet type "text/css" href "https://js.qcode.co.uk/qcode-ui-4.13.0/css/qcode-ui.css"]
-    append html [h script type "text/javascript" src "https://d1ab3pgt4r9xn1.cloudfront.net/qcode-ui-4.34.0/js/qcode-ui.js"]    
+    append html [h script type "text/javascript" \
+	   src "https://code.jquery.com/jquery-1.9.1.min.js"]
+    append html [h script type "text/javascript" \
+	   src "https://code.jquery.com/ui/1.9.2/jquery-ui.min.js"]
+    append html [h script type "text/javascript" \
+	   src "https://cdn.jsdelivr.net/npm/js-cookie@2/src/js.cookie.min.js"]
+    append html [h script type "text/javascript" \
+	   src "https://cdnjs.cloudflare.com/ajax/libs/qtip2/3.0.3/jquery.qtip.min.js"]
+    append html [h script type "text/javascript" \
+	   src "https://d1ab3pgt4r9xn1.cloudfront.net/qcode-ui-4.34.0/js/qcode-ui.js"]
+
+
+# \
+# 	   integrity "sha256-wS9gmOZBqsqWxgIVgA8Y9WcQOa7PgSIX+rPA0VL2rbQ=" \
+# 	   crossorigin "anonymous"
+    
+ # \
+ #           integrity "sha256-eEa1kEtgK9ZL6h60VXwDsJ2rxYCwfxi40VZ9E0XwoEA=" \
+ # 	   crossorigin "anonymous"
+
+    # append html [h script type "text/javascript" src "https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"]
+    # append html [h link rel stylesheet type "text/css" href "https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css"]
+    # append html [h link rel stylesheet type "text/css" href "https://js.qcode.co.uk/vendor/qtip/2.2.1/jquery.qtip.min.css"]
+    # append html [h link rel stylesheet type "text/css" href "https://js.qcode.co.uk/qcode-ui-4.13.0/css/qcode-ui.css"]
+    
     set form ""
     append form [h label "Blog Title:"]
     append form [h input type text name entry_title value $entry_title]
@@ -114,9 +121,9 @@ register GET /entries/:entry_id/edit {entry_id} {
     append form [h input type submit name submit value Update]
     append form [h br]
     append form [h br]
-    append form [h a href "http://localhost/entries" "Return to index"]
     
     append html [qc::form id "update-form" method POST action "/entries/$entry_id" $form]
+    append form [h a href "http://localhost/entries" "Return to index"]    
     append html [h script type "text/javascript" \
     		{$('#update-form').validation({submit: false});
     	        	 
